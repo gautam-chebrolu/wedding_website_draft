@@ -12,18 +12,18 @@ html {
 body {
     font-family: 'Inter', sans-serif;
     color: #1a1a1a;
-    line-height: 1.6;
+    line-height: 1;
     background-color: #fcfcfc; /* Off-white background */
 }
 
 h1, h2, h3, h4, h5 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 400;
     margin-bottom: 1rem;
 }
 
 h1 {
-    font-size: clamp(3.5rem, 15vw, 15rem); 
+    font-size: clamp(3.5rem, 8vw, 8rem); 
     line-height: 0.9;
     margin: 0; /* Remove margin to keep alignment tight */
     display: block;
@@ -85,15 +85,19 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
     z-index: 1000;
     /* background: rgba(252, 252, 252, 0.95); */
     background: transparent;
+    border-bottom: none;
     color: #fff;
+    
     backdrop-filter: blur(10px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
 
-    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeInNavbar 1s ease-out 4.5s forwards;
+
+    /* transition: all 0.3s ease; */
 }
 
 .nav-links a { margin-right: 1.5rem; font-size: 0.9rem; }
@@ -104,11 +108,27 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
     background: rgba(252, 252, 252, 0.95); /* Becomes solid white */
     color: #1a1a1a; /* Text turns black */
     box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* subtle shadow */
+    opacity: 1; 
+    pointer-events: auto;
+    /* border-bottom: 1px solid rgba(0,0,0,0.05); */
 }
 
 .navbar a { 
     color: inherit; 
     text-decoration: none;
+}
+
+#splash-curtain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #68947994; /* Your green background */
+    z-index: 3; /* Highest priority */
+    
+    /* Fade out the curtain at 3s */
+    animation: fadeOutCurtain 1.5s ease-out 2s forwards;
 }
 
 /* Hero */
@@ -117,6 +137,8 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
     height: 100vh; /* 100% of the Viewport Height */
     width: 100%;
     overflow: hidden;
+
+    background-color: #ffffff;
     
     /* Center the text */
     display: flex;
@@ -128,6 +150,26 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
     color: #fff; /* White text to pop against the image */
     padding-bottom: 1rem;
 }
+.hero-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Layer 1: Background Image */
+.hero-bg {
+    z-index: 1;
+}
+.hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0; /* Slight dim if desired */
+
+    animation: fadeInImage 1s ease-out 1s forwards;
+}
 .hero-content {
     position: relative;
     z-index: 1;
@@ -136,6 +178,44 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
     /* Center the wrapper horizontally */
     display: flex;
     justify-content: center;
+}
+/* Layer 2: Logo Container */
+.hero-logo-container {
+    z-index: 4; /* Sits on top of background */
+    
+    /* Center the SVG */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* Let clicks pass through to background */
+}
+
+.hero-logo-container svg {
+    /* Responsive size limits */
+    width: 80%;
+    max-width: 500px;
+    height: auto;
+}
+
+/* Layer 3: Subject Cutout */
+.hero-subject {
+    z-index: 5; /* Sits on top of Logo */
+    pointer-events: none;
+    
+    /* Starts hidden, fades in */
+    opacity: 0;
+    animation: fadeInSubject 1s ease-out 2s forwards;
+}
+.hero-subject img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Layer 4: Text Content (Existing Class) */
+.hero-content {
+    z-index: 10; /* Sits on top of everything */
+    /* ... existing hero-content styles ... */
 }
 
 /* New Wrapper: Shrinks to fit the width of the H1 text */
@@ -311,8 +391,8 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
        2. fillInLogo (0.5s) - Fades the color in AFTER drawing finishes
     */
     animation: 
-        drawLogo 1.5s ease-in-out forwards,
-        fillInLogo 1s ease-in-out 1s forwards;
+        drawLogo .5s ease-in-out forwards,
+        fillInLogo .5s ease-in-out .5s forwards;
 }
 
 /* --- KEYFRAMES --- */
@@ -349,6 +429,52 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
         opacity: 1;
         transform: translateY(0); /* Settles into place */
     }
+}
+
+/* 1. Curtain Fade Out */
+@keyframes fadeOutCurtain {
+    to { opacity: 0; visibility: hidden; }
+}
+
+/* 2. Subject Fade In */
+@keyframes fadeInSubject {
+    to { opacity: 1; }
+}
+
+/* 3. UPDATED LOGO ANIMATION PATHS */
+/* Note: We changed fill-opacity to 0.5 instead of 1 in the last step */
+.hero-logo-container .logo-path {
+    fill: #d9d9c7;
+    fill-opacity: 0; 
+    stroke: #d9d9c7;
+    stroke-width: 1px;
+    stroke-dasharray: 5000; 
+    stroke-dashoffset: 5000; 
+    
+    animation: 
+        drawLogo 2.5s ease-in-out forwards,
+        fillInLogoHalf 1s ease-in-out 2.0s forwards; /* Overlaps draw slightly */
+}
+
+/* New Keyframe: Fill to 50% only */
+@keyframes fillInLogoHalf {
+    to {
+        fill-opacity: 0.75; /* The requested transparency */
+        stroke-opacity: 0.75; /* Fade the outline to match */
+    }
+}
+
+/* Keep existing Draw animation */
+@keyframes drawLogo {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeInImage {
+    to { opacity: 0.9; } /* Fades to 90% opacity as before */
+}
+
+@keyframes fadeInNavbar {
+    to { opacity: 1; }
 }
 
 
@@ -397,6 +523,8 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
         opacity: 1; 
         pointer-events: auto; 
         transform: translateY(100%); /* Starts hidden below the screen */
+
+        animation: slideUpNavbar 1s ease-out 3s forwards;
     }
 
     .navbar.scrolled {
@@ -408,7 +536,7 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
         box-shadow: 0 -4px 20px rgba(0,0,0,0.05); /* subtle shadow pointing up */
         
         /* Ensure we don't accidentally double-fade */
-        opacity: 1; 
+        /* opacity: 1;  */
     }
 
     /* 5. Hide Links, adjust Button */
@@ -418,4 +546,8 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
         padding: 10px 20px;
         font-size: 0.8rem;
     }
+}
+
+@keyframes slideUpNavbar {
+    to { transform: translateY(0); }
 }

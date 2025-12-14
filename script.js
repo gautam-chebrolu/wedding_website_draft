@@ -39,8 +39,8 @@ updateCountdown();
 // Remove splash screen from DOM after animation finishes
 // The timeout (4000ms) matches the CSS animation duration (3.5s + 0.5s buffer)
 setTimeout(() => {
-    const splash = document.getElementById('splash-screen');
-    if (splash) {
-        splash.remove();
+    const splash = document.getElementById('splash-curtain');
+    if (curtain) {
+        curtain.remove();
     }
 }, 4000);
