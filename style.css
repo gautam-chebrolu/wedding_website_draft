@@ -67,7 +67,7 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
 
 .btn {
     display: inline-block;
-    background: #687a9494;
+    background: #2a84bc;
     color: #fff;
     padding: 12px 24px;
     border-radius: 50px;
@@ -75,7 +75,7 @@ img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-.btn:hover { background: #164e71; }
+.btn:hover { background: #19567c; }
 .btn.full-width { width: 100%; text-align: center; }
 
 /* Navbar */
